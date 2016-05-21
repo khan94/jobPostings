@@ -1,0 +1,174 @@
+
+LOGIN.PHP:	
+		select APP_LOGIN, PASSWORD 
+		from APPLICANTS where APP_LOGIN = '" . $bind1 ."' 
+		AND  PASSWORD = '" . $bind2 ."' ";
+
+		select EMP_LOGIN, PASSWORD 
+		from EMPLOYER_RUNS where EMP_LOGIN = '" . $bind1 ."' 
+		AND  PASSWORD = '" . $bind2 ."' 
+
+EMPLOYER.PHP:
+select * from Applicants
+
+$sql = "select * from Job_Postings where login = '" . $current_login . "'";
+
+$sql = "select skill from Skills";
+
+$jobs_by_employer = "create view jobs_by_employer as select job_id from job_postings where login = '".$current_login."'";
+
+$yams = "select A.login 
+                 from Apply A, jobs_by_employer J
+                 where A.job_id = J.job_id";
+        $sql = "select Ap.app_login, A2.job_id, Ap.name, Ap.phone_number, Ap.email, Ap.address 
+                from Applicants Ap, Apply A2 
+                where Ap.app_login in (" . $yams . ") AND Ap.app_login = A2.login";
+
+$drop = "drop view jobs_by_employer";
+
+$query = "select job_id from job_postings";
+
+$statement = "insert into job_postings VALUES ('" . $job_id . "','" . $current_login . "','" . $desc . "'," . $date . ",'" . $job_title . "','" . $salary . "')";
+
+$query = "insert into job_requires_skills VALUES ('" . $job_id . "','" . $skill1 . "','" . $prof1 . "')";
+
+$query = "insert into job_requires_skills VALUES ('" . $job_id . "','" . $skill2 . "','" . $prof2 . "')";
+
+$query = "insert into job_requires_skills VALUES ('" . $job_id . "','" . $skill3 . "','" . $prof3 . "')";
+
+$check_query = "select * from job_postings where login = '" . $current_login . "' AND job_id = '" . $job_id . "'";
+
+$query = "select * from job_offers where applicant_login = '". $app_login ."' AND job_id = '". $job_id ."' AND employer_login = '". $current_login ."'";
+
+$query = "insert into job_offers VALUES ('". $current_login ."','". $app_login ."',". $job_id .")";
+
+$query = "select * from Apply where login = '" . $app_login . "' AND job_id = '" . $job_id . "'";
+
+ $query = "select interview_id from interviews";
+
+$add_interview_query = "insert into interviews VALUES (" . $random . ",'n'," . $date . ",'" . $time . "','" . $address . "')";
+
+$insert_query = "insert into Apply VALUES ('" . $app_login . "'," . $job_id . "," . $random . ")";
+
+$query = "select interview_id from interviews";
+
+$add_interview_query = "insert into interviews VALUES (" . $random . ",'n'," . $date . ",'" . $time . "','" . $address . "')";
+
+$final_query = "update Apply set iv_id = " . $random . " where login = '" . $app_login . "' AND job_id = '" . $$job_id . "'";
+
+$query = "delete iv_id from apply where job_id = '" . $job_id . "'";
+
+ $delete_query = "delete from interviews
+                         where interview_id = '" . $row['IV_ID'] . "'";
+
+$delete_query = "delete from job_postings
+                       where job_id = '" . $job_id . "'";
+
+
+
+        
+APPLICANT.PHP
+		$get_jobs = "select * from Job_Postings";
+
+		$get_skills_for_job = "select skill from job_requires_skills where jobid = " . $job_id;
+
+		$get_all_my_interviews =  "select a.job_id, i.interview_id, i.interview_date, i.interview_time, i.address "
+                . "from Interviews i, Apply A "
+                . "where i.interview_id in ("
+                                          . "select iv_id "
+                                          . "from Apply "
+                                          . "where login = " . "'" . $current_login . "'"  
+                                          . ") AND i.interview_id = a.iv_id AND "
+                                          . "i.accepted = 'y'";
+
+       $get_my_skills = "select * from Applicant_Has_Skills where login = " . "'" . $current_login . "'" ;
+
+        $get_my_job_offers =  "select jp.job_id, jp.salary, jp.posting_date, jp.job_title, jp.description, c.company_name "
+                . "from Job_Postings jp, Job_Offers jo, employer_runs e, companies c "
+                . "where   jp.job_id = jo.job_id AND "
+                . "jo.applicant_login = " . "'" . $current_login . "'" . " AND "
+                . "e.emp_login = jp.login AND "
+                . "e.c_id = c.c_id";
+
+        $my_interview_offers =  "select  i.interview_id, a.job_id, i.interview_date, i.interview_time, i.address "
+                . "from  interviews i, apply a " 
+                . "where   a.iv_id = i.interview_id AND "
+                . "a.login = " . "'" . $current_login ."'" .  " AND "
+                . "i.accepted = 'n'";
+
+        $applied_jobs =  "select * "
+                      . "from job_postings j "
+                      . "where j.job_id in ("
+                                          . "select a.job_id "
+                                          . "from Apply a "
+                                          . "where login = " . "'" . $current_login . "'"
+                                        . ")";
+
+         $sql = "select iv_id from apply where job_id = " . $job_id . " AND login = '" . $current_login ."'";
+
+
+         $sql2 = "delete from apply where job_id = " . $job_id . " AND login = '" . $current_login ."'";
+
+         $sql3 = "delete from interviews where interview_id = " . $interview_id;
+
+         $sql4 = "delete from job_postings where job_id = " . $job_id;
+
+         $sql = "update interviews set accepted = 'y' where interview_id = " . $interview_id;
+
+         $sql = "delete from interviews where interview_id = " . $interview_id;
+
+         $sql = "select * from applicant_has_skills a where skill = '" . $skill . "' AND login = '" . $current_login ."'";
+
+         $sql1 = "insert into applicant_has_skills values ('" . $current_login . "','" . $skill ."'," . $proficiency . ")";
+
+         $sql2 = "update applicant_has_skills set proficiency = " . $proficiency . " where skill = '" . $skill . "' AND login = '" . $current_login ."'";
+
+MAXMINSKILLS.PHP
+		 $create_num_skills_per_job_view = "create view num_skills_per_job as  
+      		select jp.job_id as job_id, count(distinct jrs.skill) as num_skills 
+      		from job_postings jp, job_requires_skills jrs 
+      		where jp.job_id = jrs.jobid 
+      		group by jp.job_id";
+
+      	$sql =  "select jp.job_title as job_title, max(num_skills) as max_num_skills 
+     	 from num_skills_per_job nspr, job_postings jp
+      		where nspr.job_id = jp.job_id
+      		group by jp.job_title";
+
+      $drop_view = "drop view num_skills_per_job";
+
+      	$create_num_skills_per_job_view = "create view num_skills_per_job as " . 
+                                      "select jp.job_id as job_id, count(distinct jrs.skill) as num_skills " .
+                                      "from job_postings jp, job_requires_skills jrs " .
+                                      "where jp.job_id = jrs.jobid " .
+                                      "group by jp.job_id";
+      $sql =  "select jp.job_title as job_title, min(num_skills) as min_num_skills " .
+              "from num_skills_per_job nspr, job_postings jp " .
+              "where nspr.job_id = jp.job_id " .
+              "group by jp.job_title";
+
+      $drop_view = "drop view num_skills_per_job";
+
+FILTEREDJOBS.PHP
+
+    $result = executePlainSQL("select j.job_id, j.salary, j.job_title "
+                              . "from Job_Postings j, Job_Requires_Skills js "
+                              . "where   j.job_id = js.jobid AND " 
+                              . "salary >= " . $salary . " AND "
+                              . "js.skill = " . "'" . $skill . "'");
+
+SIGNUPEMPLOYER.PHP
+
+	INSERT INTO COMPANIES(c_id,company_name) VALUES('$cid','$cname')
+
+	INSERT INTO COMPANY_LOCATIONS(b_id,c_id,address) VALUES('$bid','$cid','$caddress')
+
+	INSERT INTO EMPLOYER_RUNS(emp_login,sin,name,phone_number,password,email,address,b_id,c_id) VALUES('$emplogin','$esin','$ename','$ephonenumber','$epassword','$eemail','$caddress','$bid','$cid')
+
+	SELECT emp_login FROM EMPLOYER_RUNS WHERE emp_login='$emplogin'
+
+SIGNUPAPPLICANT.PHP
+
+	INSERT INTO APPLICANTS(app_login,sin,name,phone_number,password,email,address) VALUES('$applogin','$asin','$aname','$aphonenumber','$apassword','$aemail','$aaddress')
+
+	SELECT app_login FROM APPLICANTS WHERE app_login='$applogin'

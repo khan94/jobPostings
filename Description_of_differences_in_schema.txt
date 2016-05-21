@@ -1,0 +1,10 @@
+Three slight changes to schema.
+
+1.
+	We added an attribute 'accepted' to interviews which could be set as 'y' or 'n'. A 'y' describes a scheduled interview that is scheduled. A 'n' descrives a pending interview offer. In this way we could distinguish between interviews and offers.
+
+2.
+	We added a CASCADE description on job_requires_skill's foreign key to job_posting. So if a job_posting is deleted, it's associated skills are deleted as well.
+
+3. 
+	Apply does not have interview as part of it's primary key because when applicant first applies, they do not have an intervoew_id.

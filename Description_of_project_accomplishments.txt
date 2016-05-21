@@ -1,0 +1,11 @@
+Project Accomplishments:
+
+Our group managed to accomplish a working database of generated jobs. The interface allows either employers or applicants to sign up. THe users can then sign in through a common interface and gain access to a differing panel of options.
+
+ Employers can view their own job postings, delete jobs, offer job, schedule interviews, see all applicants, and check who applied to a job.
+
+ Applicants can view all jobs, check their interviews, view and update their skills, accept or decline both interviews and job offers.
+
+A sign up Page for each of employers and applicants.
+
+A login page for employers and applicants that interact through the same interface.

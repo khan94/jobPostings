@@ -1,0 +1,122 @@
+Update Query 
+
+	- Go to index.php
+	- sign in with w3llm4rt and ripoff
+	- post a new job with some title = Cashier, salary = 20000, Description = boring job, and pick three skills
+	- refresh, go to my jobs show that new job shows up
+	- go to index.php
+	- sign in with bigshooter69 and lildicky69
+	- go to jobs tab, refresh page, verify that the newly posted job is in the table
+	- go back to index.php, sign in with w3llm4rt and ripoff
+	- try posting a new job with no skills
+	- this insertion should fail, however our create assertion sql statement didnt work so this will actually still work, so it will show up in my jobs!
+
+	- $statement = "insert into job_postings VALUES ('" . $job_id . "','" . $current_login . "','" . $desc . "'," . $date . ",'" . $job_title . "','" . $salary . "')";
+
+
+	- SHOW THESE ASSERT STATEMENTS! 
+	- CREATE ASSERTION allApplicantsHaveSkills CHECK ( NOT EXISTS ((SELECT login FROM APPLICANTS) EXCEPT (SELECT login FROM APPLICANT_HAS_SKILLS))); 
+
+
+	- THIS ASSERTION SHOULD HAVE PREVENTED THE INSERTION!!!!
+
+
+	- CREATE ASSERTION allJobsRequireSkills CHECK ( NOT EXISTS ((SELECT job_id FROM JOB_POSTINGS) EXCEPT (SELECT job_id FROM JOB_REQUIRES_SKILLS))); 
+
+	- so technically, the insert with no skills SHOULD NOT work!
+
+Projection/Selection Query FILTER APPLICANTS BY SKILL in EMPLOYER.PHP
+
+	- Go to applicants tab in employer.php
+	- Run once with auditing, once with baristaing
+
+
+	- select * 
+					  from Applicants Ap, applicant_has_skills A
+					  where Ap.app_login = A.login AND skill = '" . $skill . "'"
+
+Join Query GET MY JOB OFFERS in APPLICANT.PHP
+
+	- Go to index.php
+	- Sign in with bigshooter69 and lildicky69
+	- click on job offers table
+	- $get_my_job_offers =  "select jp.job_id, jp.salary, jp.posting_date, jp.job_title, jp.description, c.company_name "
+                . "from Job_Postings jp, Job_Offers jo, employer_runs e, companies c "
+                . "where   jp.job_id = jo.job_id AND "
+                . "jo.applicant_login = " . "'" . $current_login . "'" . " AND "
+                . "e.emp_login = jp.login AND "
+                . "e.c_id = c.c_id";
+
+Division Query PERFECT MATCHES in EMPLOYER.PHP
+
+	- Go to index.php 
+	- sign in with w3llm4rt and ripoff
+	- click on perfect matches tab
+	- use 10930082 to search for perfect match (ie find applicants to one of my jobs where that applicant has all the required skills)
+	- $perfect_query = "select *
+	                          from Applicants a
+	                          where not exists (select skill
+	                                            from job_requires_skills jrs
+	                                            where jrs.jobid = " . $job_id . "
+	                                            minus (select skill
+	                                                   from applicant_has_skills ahs
+	                                                   where ahs.login = a.app_login))";
+
+
+Aggregation Query NUMBER OF JOBS in JOBS TAB in APPLICANT.php
+
+	- Go to index.php
+	- sign in with bigshooter69 and lildicky69
+	- click on jobs tab
+	- Should display '' total jobs under jobs table
+	- $get_num_jobs = "select count(*) as num_jobs from job_postings";
+
+
+Nested Aggregation Query With Group By in JOBS TAB IN MAXMINSKILLS.PHP 
+
+	- Go to jobs tab
+	- click on GETMAX!
+	- click on GETMIN!
+	- this is finding the max or min number of skills required for jobs of each job type
+	
+	1.) $create_num_skills_per_job_view = "create view num_skills_per_job as  
+      select jp.job_id as job_id, count(distinct jrs.skill) as num_skills 
+      from job_postings jp, job_requires_skills jrs 
+      where jp.job_id = jrs.jobid 
+      group by jp.job_id";
+    
+      $sql =  "select jp.job_title as job_title, max(num_skills) as max_num_skills 
+      from num_skills_per_job nspr, job_postings jp
+      where nspr.job_id = jp.job_id
+      group by jp.job_title";
+
+
+    2.) $create_num_skills_per_job_view = "create view num_skills_per_job as " . 
+                                      "select jp.job_id as job_id, count(distinct jrs.skill) as num_skills " .
+                                      "from job_postings jp, job_requires_skills jrs " .
+                                      "where jp.job_id = jrs.jobid " .
+                                      "group by jp.job_id";
+    
+      $sql =  "select jp.job_title as job_title, min(num_skills) as min_num_skills " .
+              "from num_skills_per_job nspr, job_postings jp " .
+              "where nspr.job_id = jp.job_id " .
+              "group by jp.job_title";
+
+
+Delete Operation DELETE JOB POSTINGS
+	- go to index.php
+	- sign in with w3llm4rt and ripoff
+	-  go to delete jobs and delete the job recently added
+	-  Also, show that the job deletion cascades on the job_requires_skills
+	- Show the required skills for the job being deleted
+	- $delete_query = "delete from job_postings
+                       where job_id = '" . $job_id . "'";
+    - Show the required skills for the job being deleted (to show the delete cascade)
+
+
+
+
+
+
+
+
